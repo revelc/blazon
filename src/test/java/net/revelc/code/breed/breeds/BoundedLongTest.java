@@ -26,23 +26,27 @@ public class BoundedLongTest {
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
+  private static Long tester(final BoundedLong bounds, final String input) {
+    return bounds.converter().apply(input);
+  }
+
   @Test
   public void test() {
     BoundedLong bounds = new BoundedLong(-24, 35);
-    assertNull(bounds.apply("-abc"));
-    assertNull(bounds.apply("abc"));
-    assertNull(bounds.apply("-25"));
-    assertEquals((Long) (-24L), bounds.apply("-24"));
-    assertEquals((Long) 35L, bounds.apply("35"));
-    assertNull(bounds.apply("36"));
+    assertNull(tester(bounds, "-abc"));
+    assertNull(tester(bounds, "abc"));
+    assertNull(tester(bounds, "-25"));
+    assertEquals((Long) (-24L), tester(bounds, "-24"));
+    assertEquals((Long) 35L, tester(bounds, "35"));
+    assertNull(tester(bounds, "36"));
   }
 
   @Test
   public void testConstructor() {
     BoundedLong bounds = new BoundedLong(35, 35);
-    assertNull(bounds.apply("34"));
-    assertEquals((Long) 35L, bounds.apply("35"));
-    assertNull(bounds.apply("36"));
+    assertNull(tester(bounds, "34"));
+    assertEquals((Long) 35L, tester(bounds, "35"));
+    assertNull(tester(bounds, "36"));
   }
 
   @Test

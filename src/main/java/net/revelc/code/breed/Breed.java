@@ -19,20 +19,22 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 /**
- * A Breed is a type. It provides a mechanism to validate a configuration property, either before or
- * after conversion (or both).
+ * A Breed(noun) is a type. It provides a mechanism to validate a configuration property, either
+ * before or after conversion (or both).
  *
  * @param <T>
  *          The target Java type this Breed represents.
  */
-public abstract class Breed<T> implements Function<String,T> {
+public abstract class Breed<T> {
 
-  public Predicate<String> preCheck() {
+  protected Predicate<String> preCheck() {
     return Predicates.alwaysTrue();
   }
 
-  public Predicate<T> postCheck() {
+  protected Predicate<T> postCheck() {
     return Predicates.alwaysTrue();
   }
+
+  protected abstract Function<String,T> converter();
 
 }

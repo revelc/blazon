@@ -16,6 +16,8 @@ package net.revelc.code.breed;
 
 import static org.junit.Assert.assertEquals;
 
+import com.google.common.base.Function;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +36,13 @@ public class KeyTest {
   public void setup() {
     testKey = new Key<>("my.test.key", new Breed<Integer>() {
       @Override
-      public Integer apply(String input) {
-        return Integer.parseInt(input);
+      protected Function<String,Integer> converter() {
+        return new Function<String,Integer>() {
+          @Override
+          public Integer apply(String input) {
+            return Integer.parseInt(input);
+          }
+        };
       }
     });
   }

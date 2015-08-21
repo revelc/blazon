@@ -75,13 +75,21 @@ public class BoundedLong extends Breed<Long> {
     } catch (NumberFormatException e) {
       return null;
     }
-    if (number < lowerBound || (!lowerInclusive && number == lowerBound)) {
-      return null;
-    }
-    if (number > upperBound || (!upperInclusive && number == upperBound)) {
-      return null;
-    }
     return number;
+  }
+
+  @Override
+  protected Long checkPostconditions(Long value) throws RuntimeException {
+    if (value == null) {
+      return null;
+    }
+    if (value < lowerBound || (!lowerInclusive && value == lowerBound)) {
+      return null;
+    }
+    if (value > upperBound || (!upperInclusive && value == upperBound)) {
+      return null;
+    }
+    return value;
   }
 
 }

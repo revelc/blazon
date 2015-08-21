@@ -16,6 +16,8 @@ package net.revelc.code.breed;
 
 import static org.junit.Assert.assertEquals;
 
+import net.revelc.code.breed.providers.MapValueProvider;
+import net.revelc.code.breed.providers.PropertiesValueProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,16 +53,18 @@ public class KeyTest {
   public void testPropertiesSource() {
     Properties props = new Properties();
     props.setProperty("my.test.key", "23");
-    assertEquals((Integer) 23, testKey.get(props));
-    assertEquals((Integer) 42, testKeyWithDefault.get(props));
+    PropertiesValueProvider provider = new PropertiesValueProvider(props);
+    assertEquals((Integer) 23, testKey.getValue(provider));
+    assertEquals((Integer) 42, testKeyWithDefault.getValue(provider));
   }
 
   @Test
   public void testMapSource() {
     Map<String,String> map = new HashMap<>();
     map.put("my.test.key", "23");
-    assertEquals((Integer) 23, testKey.get(map));
-    assertEquals((Integer) 42, testKeyWithDefault.get(map));
+    MapValueProvider provider = new MapValueProvider(map);
+    assertEquals((Integer) 23, testKey.getValue(provider));
+    assertEquals((Integer) 42, testKeyWithDefault.getValue(provider));
   }
 
 }

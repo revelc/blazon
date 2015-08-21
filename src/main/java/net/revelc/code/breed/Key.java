@@ -17,9 +17,16 @@ package net.revelc.code.breed;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
-import java.util.Map;
-import java.util.Properties;
-
+/**
+ * A representation of a configuration property or key, which corresponds to a distinct type (or
+ * {@link Breed}). A key optionally has a default value and can be retrieved from a configuration
+ * source using a {@link ValueProvider}. When it is retrieved, it will be validated and converted to
+ * its expected type according to its {@link Breed}.
+ *
+ * @param <T>
+ *          the type which the value will be represented as when it is retrieved from the
+ *          configuration source
+ */
 public class Key<T> {
 
   private final String key;
@@ -27,11 +34,8 @@ public class Key<T> {
   private final Optional<T> defaultValue;
 
   /**
-   * Create a new Key with the given identifier and type. By default, Keys can be retrieved from a
-   * {@link Map}&lt;String,String&gt; or from {@link Properties}. However, one can extend this class
-   * and create a getter to retrieve values from additional sources. Subclasses should call
-   * {@link #parseValue(String)} after retrieving the String value from the configuration source,
-   * with an optional default value.
+   * Create a new Key with the given identifier and type, so that its value can be retrieved and
+   * from a {@link ValueProvider} and processed by the {@link Breed} which defines its type.
    *
    * @param key
    *          the unique identifier for this particular configuration property
@@ -44,11 +48,8 @@ public class Key<T> {
   }
 
   /**
-   * Create a new Key with the given identifier and type. By default, Keys can be retrieved from a
-   * {@link Map}&lt;String,String&gt; or from {@link Properties}. However, one can extend this class
-   * and create a getter to retrieve values from additional sources. Subclasses should call
-   * {@link #parseValue(String)} after retrieving the String value from the configuration source,
-   * with an optional default value.
+   * Create a new Key with the given identifier and type, so that its value can be retrieved and
+   * from a {@link ValueProvider} and processed by the {@link Breed} which defines its type.
    *
    * @param key
    *          the unique identifier for this particular configuration property
@@ -64,10 +65,8 @@ public class Key<T> {
   }
 
   private Key(final String key, final Breed<T> breed, final Optional<T> defaultValue) {
-    Preconditions.checkNotNull(key);
-    Preconditions.checkNotNull(breed);
-    this.key = key;
-    this.breed = breed;
+    this.key = Preconditions.checkNotNull(key);
+    this.breed = Preconditions.checkNotNull(breed);
     this.defaultValue = defaultValue;
   }
 
@@ -123,25 +122,27 @@ public class Key<T> {
    *          the raw value retrieved from the configuration source, or null if it wasn't found
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
-  protected T parseValue(final String value) {
-    if (value == null && defaultValue.isPresent()) {
-      return defaultValue.get();
+  protected T parseRawValue(final String value) {
+    final T defaultV = getDefaultValue();
+    if (value == null && defaultV != null) {
+      return defaultV;
     }
-    T parsed = breed.process(value);
+    final T parsed = getBreed().process(value);
     if (parsed == null) {
-      return defaultValue.orNull();
+      return defaultV;
     }
     return parsed;
   }
 
-  public T get(final Map<String,String> source) {
-    Preconditions.checkNotNull(source);
-    return parseValue(source.get(key));
-  }
-
-  public T get(final Properties source) {
-    Preconditions.checkNotNull(source);
-    return parseValue(source.getProperty(key));
+  /**
+   * Retrieve a value from the given {@link ValueProvider}, using this {@link #getKey()}.
+   *
+   * @param provider
+   *          a source of {@link String} values arranged by {@link String} keys
+   * @return an instance of the type this Key represents, after it has been parsed and validated
+   */
+  public T getValue(final ValueProvider<?> provider) {
+    return parseRawValue(Preconditions.checkNotNull(provider).getValue(getKey()));
   }
 
 }

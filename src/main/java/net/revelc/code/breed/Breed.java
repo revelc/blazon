@@ -17,8 +17,11 @@ package net.revelc.code.breed;
 /**
  * A Breed(noun) is a type. It provides a mechanism to validate a configuration property, either
  * before or after conversion (or both). A successful conversion will go through
- * {@link #validate(String)}, then {@link #convert(String)}, then {@link #constrain(Object)}. See
- * {@link #process(String)}.
+ * {@link #checkPreconditions(String)}, then {@link #convert(String)}, then
+ * {@link #checkPostconditions(Object)}. See {@link #process(String)}. Subclasses may choose to
+ * throw a specific {@link RuntimeException} like {@link IllegalArgumentException} or
+ * {@link NumberFormatException}, in case of error, or they may wish to log the error and continue
+ * processing some default behavior (like returning a null).
  *
  * @param <T>
  *          The target Java type this Breed represents.
@@ -36,7 +39,7 @@ public abstract class Breed<T> {
    * @throws RuntimeException
    *           an exception appropriate to the failure, if the element fails to validate
    */
-  protected String validate(final String raw) throws RuntimeException {
+  protected String checkPreconditions(final String raw) throws RuntimeException {
     return raw;
   }
 
@@ -59,13 +62,13 @@ public abstract class Breed<T> {
    * @throws RuntimeException
    *           an exception appropriate to the failure, if the element fails to validate
    */
-  protected T constrain(final T value) throws RuntimeException {
+  protected T checkPostconditions(final T value) throws RuntimeException {
     return value;
   }
 
   /**
-   * Processes the raw value by first applying {@link #validate(String)}, then
-   * {@link #convert(String)}, then {@link #constrain(Object)}.
+   * Processes the raw value by first applying {@link #checkPreconditions(String)}, then
+   * {@link #convert(String)}, then {@link #checkPostconditions(Object)}.
    *
    * @param raw
    *          the raw value to be converted
@@ -75,7 +78,7 @@ public abstract class Breed<T> {
    *           conversion
    */
   public final T process(final String raw) throws RuntimeException {
-    return constrain(convert(validate(raw)));
+    return checkPostconditions(convert(checkPreconditions(raw)));
   }
 
 }

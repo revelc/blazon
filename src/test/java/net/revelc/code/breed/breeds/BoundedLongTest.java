@@ -27,7 +27,7 @@ public class BoundedLongTest {
   public ExpectedException exception = ExpectedException.none();
 
   private static Long tester(final BoundedLong bounds, final String input) {
-    return bounds.converter().apply(input);
+    return bounds.process(input);
   }
 
   @Test

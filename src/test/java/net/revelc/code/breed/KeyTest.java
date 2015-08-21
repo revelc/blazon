@@ -16,8 +16,6 @@ package net.revelc.code.breed;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.common.base.Function;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,6 +26,7 @@ import java.util.Properties;
 public class KeyTest {
 
   private Key<Integer> testKey;
+  private Key<Integer> testKeyWithDefault;
 
   /**
    * Create a test key for use in tests.
@@ -36,15 +35,16 @@ public class KeyTest {
   public void setup() {
     testKey = new Key<>("my.test.key", new Breed<Integer>() {
       @Override
-      protected Function<String,Integer> converter() {
-        return new Function<String,Integer>() {
-          @Override
-          public Integer apply(String input) {
-            return Integer.parseInt(input);
-          }
-        };
+      protected Integer convert(final String raw) throws RuntimeException {
+        return Integer.parseInt(raw);
       }
     });
+    testKeyWithDefault = new Key<>("my.test.key.with.default", new Breed<Integer>() {
+      @Override
+      protected Integer convert(final String raw) throws RuntimeException {
+        return Integer.parseInt(raw);
+      }
+    }, 42);
   }
 
   @Test
@@ -52,12 +52,7 @@ public class KeyTest {
     Properties props = new Properties();
     props.setProperty("my.test.key", "23");
     assertEquals((Integer) 23, testKey.get(props));
-  }
-
-  @Test
-  public void testPropertiesSourceWithDefault() {
-    Properties props = new Properties();
-    assertEquals((Integer) 42, testKey.get(props, 42));
+    assertEquals((Integer) 42, testKeyWithDefault.get(props));
   }
 
   @Test
@@ -65,12 +60,7 @@ public class KeyTest {
     Map<String,String> map = new HashMap<>();
     map.put("my.test.key", "23");
     assertEquals((Integer) 23, testKey.get(map));
-  }
-
-  @Test
-  public void testMapSourceWithDefault() {
-    Map<String,String> map = new HashMap<>();
-    assertEquals((Integer) 42, testKey.get(map, 42));
+    assertEquals((Integer) 42, testKeyWithDefault.get(map));
   }
 
 }

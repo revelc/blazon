@@ -14,27 +14,68 @@
 
 package net.revelc.code.breed;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-
 /**
  * A Breed(noun) is a type. It provides a mechanism to validate a configuration property, either
- * before or after conversion (or both).
+ * before or after conversion (or both). A successful conversion will go through
+ * {@link #validate(String)}, then {@link #convert(String)}, then {@link #constrain(Object)}. See
+ * {@link #process(String)}.
  *
  * @param <T>
  *          The target Java type this Breed represents.
  */
 public abstract class Breed<T> {
 
-  protected Predicate<String> preCheck() {
-    return Predicates.alwaysTrue();
+  /**
+   * Optional. Validate the given element prior to conversion. Override this method to enforce any
+   * preconditions for conversion. One could also apply any locale-based, or case-conversion, or
+   * other normalization here.
+   *
+   * @param raw
+   *          the raw value to be validated
+   * @return the valid string
+   * @throws RuntimeException
+   *           an exception appropriate to the failure, if the element fails to validate
+   */
+  protected String validate(final String raw) throws RuntimeException {
+    return raw;
   }
 
-  protected Predicate<T> postCheck() {
-    return Predicates.alwaysTrue();
+  /**
+   * Convert the value to the appropriate type.
+   *
+   * @param raw
+   *          the raw value to be converted
+   * @return the value, after conversion
+   * @throws RuntimeException
+   *           an exception appropriate to the failure, if the element fails to convert
+   */
+  protected abstract T convert(final String raw) throws RuntimeException;
+
+  /**
+   * Optional. Override to apply any constraints on the converted value.
+   *
+   * @param value
+   *          the raw value to be validated
+   * @throws RuntimeException
+   *           an exception appropriate to the failure, if the element fails to validate
+   */
+  protected T constrain(final T value) throws RuntimeException {
+    return value;
   }
 
-  protected abstract Function<String,T> converter();
+  /**
+   * Processes the raw value by first applying {@link #validate(String)}, then
+   * {@link #convert(String)}, then {@link #constrain(Object)}.
+   *
+   * @param raw
+   *          the raw value to be converted
+   * @return the value, after validation, conversion, and applying any post-conversion constraints
+   * @throws RuntimeException
+   *           an exception appropriate to the failure, if the element fails at any point in the
+   *           conversion
+   */
+  public final T process(final String raw) throws RuntimeException {
+    return constrain(convert(validate(raw)));
+  }
 
 }

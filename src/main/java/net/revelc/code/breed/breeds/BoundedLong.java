@@ -14,7 +14,6 @@
 
 package net.revelc.code.breed.breeds;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 
 import net.revelc.code.breed.Breed;
@@ -66,29 +65,23 @@ public class BoundedLong extends Breed<Long> {
   }
 
   @Override
-  protected Function<String,Long> converter() {
-    return new Function<String,Long>() {
-
-      @Override
-      public Long apply(final String input) {
-        if (input == null) {
-          return null;
-        }
-        long number;
-        try {
-          number = Long.parseLong(input);
-        } catch (NumberFormatException e) {
-          return null;
-        }
-        if (number < lowerBound || (!lowerInclusive && number == lowerBound)) {
-          return null;
-        }
-        if (number > upperBound || (!upperInclusive && number == upperBound)) {
-          return null;
-        }
-        return number;
-      }
-    };
+  protected Long convert(final String raw) throws RuntimeException {
+    if (raw == null) {
+      return null;
+    }
+    long number;
+    try {
+      number = Long.parseLong(raw);
+    } catch (NumberFormatException e) {
+      return null;
+    }
+    if (number < lowerBound || (!lowerInclusive && number == lowerBound)) {
+      return null;
+    }
+    if (number > upperBound || (!upperInclusive && number == upperBound)) {
+      return null;
+    }
+    return number;
   }
 
 }

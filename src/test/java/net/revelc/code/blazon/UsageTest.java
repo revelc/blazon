@@ -12,35 +12,35 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed;
+package net.revelc.code.blazon;
 
 import static org.junit.Assert.assertEquals;
 
-import net.revelc.code.breed.breeds.OneOf;
-import net.revelc.code.breed.breeds.PortType;
-import net.revelc.code.breed.providers.PropertiesValueProvider;
+import net.revelc.code.blazon.sources.PropertiesSource;
+import net.revelc.code.blazon.types.OneOf;
+import net.revelc.code.blazon.types.Port;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Properties;
 
-public class ExampleTest {
+public class UsageTest {
 
   private static enum Choices {
     ONE, TWO, THREE
   }
 
   private static class ExampleKeys {
-    public static final Key<Integer> SERVER1_PORT = new Key<>("server1.port", new PortType());
-    public static final Key<Integer> SERVER2_PORT = new Key<>("server2.port", new PortType());
+    public static final Key<Integer> SERVER1_PORT = new Key<>("server1.port", new Port());
+    public static final Key<Integer> SERVER2_PORT = new Key<>("server2.port", new Port());
     public static final Key<Choices> CHOICE = new Key<>("choice",
         new OneOf<Choices>(Choices.class));
   }
 
-  private PropertiesValueProvider provider;
+  private PropertiesSource source;
 
   /**
-   * Setup properties provider as an example configuration source.
+   * Create test configuration.
    */
   @Before
   public void setup() {
@@ -48,14 +48,14 @@ public class ExampleTest {
     props.setProperty("server1.port", "23");
     props.setProperty("server2.port", "42");
     props.setProperty("choice", "TWO");
-    provider = new PropertiesValueProvider(props);
+    source = new PropertiesSource(props);
   }
 
   @Test
   public void test() {
-    assertEquals((Integer) 23, ExampleKeys.SERVER1_PORT.getValue(provider));
-    assertEquals((Integer) 42, ExampleKeys.SERVER2_PORT.getValue(provider));
-    assertEquals(Choices.TWO, ExampleKeys.CHOICE.getValue(provider));
+    assertEquals((Integer) 23, ExampleKeys.SERVER1_PORT.getValue(source));
+    assertEquals((Integer) 42, ExampleKeys.SERVER2_PORT.getValue(source));
+    assertEquals(Choices.TWO, ExampleKeys.CHOICE.getValue(source));
   }
 
 }

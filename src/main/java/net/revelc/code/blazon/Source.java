@@ -12,18 +12,18 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed;
+package net.revelc.code.blazon;
 
 import com.google.common.base.Preconditions;
 
 /**
  * A simple interface to provide {@link String} values from {@link String} keys.
  */
-public abstract class ValueProvider<T> {
+public abstract class Source<T> {
 
   private final T source;
 
-  public ValueProvider(final T source) {
+  public Source(final T source) {
     this.source = Preconditions.checkNotNull(source);
   }
 

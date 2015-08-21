@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed.breeds;
+package net.revelc.code.blazon.types;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

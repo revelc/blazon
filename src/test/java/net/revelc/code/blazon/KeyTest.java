@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed;
+package net.revelc.code.blazon;
 
 import static org.junit.Assert.assertEquals;
 
-import net.revelc.code.breed.providers.MapValueProvider;
-import net.revelc.code.breed.providers.PropertiesValueProvider;
+import net.revelc.code.blazon.sources.MapSource;
+import net.revelc.code.blazon.sources.PropertiesSource;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,13 +35,13 @@ public class KeyTest {
    */
   @Before
   public void setup() {
-    testKey = new Key<>("my.test.key", new Breed<Integer>() {
+    testKey = new Key<>("my.test.key", new Type<Integer>() {
       @Override
       protected Integer convert(final String raw) throws RuntimeException {
         return Integer.parseInt(raw);
       }
     });
-    testKeyWithDefault = new Key<>("my.test.key.with.default", new Breed<Integer>() {
+    testKeyWithDefault = new Key<>("my.test.key.with.default", new Type<Integer>() {
       @Override
       protected Integer convert(final String raw) throws RuntimeException {
         return Integer.parseInt(raw);
@@ -53,18 +53,18 @@ public class KeyTest {
   public void testPropertiesSource() {
     Properties props = new Properties();
     props.setProperty("my.test.key", "23");
-    PropertiesValueProvider provider = new PropertiesValueProvider(props);
-    assertEquals((Integer) 23, testKey.getValue(provider));
-    assertEquals((Integer) 42, testKeyWithDefault.getValue(provider));
+    PropertiesSource source = new PropertiesSource(props);
+    assertEquals((Integer) 23, testKey.getValue(source));
+    assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
   }
 
   @Test
   public void testMapSource() {
     Map<String,String> map = new HashMap<>();
     map.put("my.test.key", "23");
-    MapValueProvider provider = new MapValueProvider(map);
-    assertEquals((Integer) 23, testKey.getValue(provider));
-    assertEquals((Integer) 42, testKeyWithDefault.getValue(provider));
+    MapSource source = new MapSource(map);
+    assertEquals((Integer) 23, testKey.getValue(source));
+    assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
   }
 
 }

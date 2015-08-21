@@ -12,16 +12,16 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed;
+package net.revelc.code.blazon;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
 /**
  * A representation of a configuration property or key, which corresponds to a distinct type (or
- * {@link Breed}). A key optionally has a default value and can be retrieved from a configuration
- * source using a {@link ValueProvider}. When it is retrieved, it will be validated and converted to
- * its expected type according to its {@link Breed}.
+ * {@link Type}). A key optionally has a default value and can be retrieved from a configuration
+ * source using a {@link Source}. When it is retrieved, it will be validated and converted to
+ * its expected type according to its {@link Type}.
  *
  * @param <T>
  *          the type which the value will be represented as when it is retrieved from the
@@ -30,43 +30,43 @@ import com.google.common.base.Preconditions;
 public class Key<T> {
 
   private final String key;
-  private final Breed<T> breed;
+  private final Type<T> type;
   private final Optional<T> defaultValue;
 
   /**
    * Create a new Key with the given identifier and type, so that its value can be retrieved and
-   * from a {@link ValueProvider} and processed by the {@link Breed} which defines its type.
+   * from a {@link Source} and processed by the {@link Type} which defines its type.
    *
    * @param key
    *          the unique identifier for this particular configuration property
-   * @param breed
-   *          the breed/type of property this key represents, which determines how the property's
-   *          value is parsed and validated
+   * @param type
+   *          the type of property this key represents, which determines how the property's value is
+   *          parsed and validated
    */
-  public Key(final String key, final Breed<T> breed) {
-    this(key, breed, Optional.<T>absent());
+  public Key(final String key, final Type<T> type) {
+    this(key, type, Optional.<T>absent());
   }
 
   /**
    * Create a new Key with the given identifier and type, so that its value can be retrieved and
-   * from a {@link ValueProvider} and processed by the {@link Breed} which defines its type.
+   * from a {@link Source} and processed by the {@link Type} which defines its type.
    *
    * @param key
    *          the unique identifier for this particular configuration property
-   * @param breed
-   *          the breed/type of property this key represents, which determines how the property's
-   *          value is parsed and validated
+   * @param type
+   *          the type of property this key represents, which determines how the property's value is
+   *          parsed and validated
    * @param defaultValue
-   *          the default value to return if the value passed to it was null, or if the
-   *          {@link Breed} interprets the a value as equivalent to null
+   *          the default value to return if the value passed to it was null, or if the {@link Type}
+   *          interprets the a value as equivalent to null
    */
-  public Key(final String key, final Breed<T> breed, final T defaultValue) {
-    this(key, breed, Optional.of(defaultValue));
+  public Key(final String key, final Type<T> type, final T defaultValue) {
+    this(key, type, Optional.of(defaultValue));
   }
 
-  private Key(final String key, final Breed<T> breed, final Optional<T> defaultValue) {
+  private Key(final String key, final Type<T> type, final Optional<T> defaultValue) {
     this.key = Preconditions.checkNotNull(key);
-    this.breed = Preconditions.checkNotNull(breed);
+    this.type = Preconditions.checkNotNull(type);
     this.defaultValue = defaultValue;
   }
 
@@ -80,12 +80,12 @@ public class Key<T> {
   }
 
   /**
-   * Getter for the {@link Breed}.
+   * Getter for the {@link Type}.
    *
-   * @return the breed
+   * @return the type
    */
-  public Breed<T> getBreed() {
-    return breed;
+  public Type<T> getType() {
+    return type;
   }
 
   /**
@@ -101,22 +101,21 @@ public class Key<T> {
    * Subclasses should override this method if they wish to change the way the default values for
    * keys are handled. The default handling behavior is as follows:
    * <ol>
-   * <li>If the value is null and a default value is available, the default value is returned
-   * <li>If the value is non-null or the default value is not available, the breed will process the
-   * value
-   * <li>If the result of the breed processing is non-null, that result is returned
-   * <li>If the result of the breed processing is null and a default value is available, the default
-   * value is returned
-   * <li>If the result of the breed processing is null and a default value is not available, null is
-   * returned
+   * <li>If the value is null and a default value was provided, the default value is returned.
+   * <li>If the value is non-null or the default value was not provided, it will be processed by the
+   * specified type.
+   * <li>If the result after processing is non-null, that result is returned.
+   * <li>If the result after processing is null and a default value was provided, the default value
+   * is returned.
+   * <li>If the result after processing is null and a default value was not provided, null is
+   * returned.
    * </ol>
    * Essentially, the behavior is such that the default value is returned whenever the key is not
-   * available in the configuration provider, or if the breed determines that what is available is
-   * equivalent to being unset. An example of this might be an empty string or a dash. Further, if
-   * the key does not have a default value, the breed has an opportunity to provide one which makes
-   * sense for the breed. For example, if the breed is a numerical type, it might provide a default
-   * value of 0 when the value is unset and the user didn't provide a default value explicitly for
-   * that key.
+   * available in the configuration source, or if the {@link Type} determines that what is available
+   * is equivalent to being unset. An example of this might be an empty string or a dash(-).
+   * Further, if the key does not have a default value, the {@link Type} has an opportunity to
+   * provide one which is appropriate for that type. For example, if the {@link Type} represents a
+   * number, it might return 0 when the value is unset and the user didn't provide a default value.
    *
    * @param value
    *          the raw value retrieved from the configuration source, or null if it wasn't found
@@ -127,7 +126,7 @@ public class Key<T> {
     if (value == null && defaultV != null) {
       return defaultV;
     }
-    final T parsed = getBreed().process(value);
+    final T parsed = getType().process(value);
     if (parsed == null) {
       return defaultV;
     }
@@ -135,14 +134,14 @@ public class Key<T> {
   }
 
   /**
-   * Retrieve a value from the given {@link ValueProvider}, using this {@link #getKey()}.
+   * Retrieve a value from the given {@link Source}, using this {@link #getKey()}.
    *
-   * @param provider
+   * @param source
    *          a source of {@link String} values arranged by {@link String} keys
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
-  public T getValue(final ValueProvider<?> provider) {
-    return parseRawValue(Preconditions.checkNotNull(provider).getValue(getKey()));
+  public T getValue(final Source<?> source) {
+    return parseRawValue(Preconditions.checkNotNull(source).getValue(getKey()));
   }
 
 }

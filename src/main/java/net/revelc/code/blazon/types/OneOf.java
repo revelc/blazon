@@ -12,26 +12,24 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed.breeds;
+package net.revelc.code.blazon.types;
 
-import net.revelc.code.breed.Breed;
+import net.revelc.code.blazon.Type;
 
 /**
- * A {@link Breed} which represents an integer in the range of 0-65535.
+ * A {@link Type} which represents one of a fixed selection of enum options.
  */
-public class PortType extends Breed<Integer> {
+public class OneOf<T extends Enum<T>> extends Type<T> {
 
-  @Override
-  protected Integer convert(final String raw) throws NumberFormatException {
-    return Integer.valueOf(raw);
+  private Class<T> enumType;
+
+  public OneOf(Class<T> enumType) {
+    this.enumType = enumType;
   }
 
   @Override
-  protected Integer checkPostconditions(Integer value) {
-    if (value < 0 || value > 65535) {
-      throw new IllegalArgumentException("Port is not in the range of 0-65535");
-    }
-    return value;
+  protected T convert(final String raw) throws RuntimeException {
+    return Enum.valueOf(enumType, raw);
   }
 
 }

@@ -12,21 +12,21 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed.providers;
+package net.revelc.code.blazon.sources;
 
-import net.revelc.code.breed.ValueProvider;
+import net.revelc.code.blazon.Source;
 
 import java.util.Properties;
 
 /**
- * A {@link ValueProvider} which wraps {@link Properties}.
+ * A {@link Source} which wraps {@link Properties}.
  */
-public class PropertiesValueProvider extends ValueProvider<Properties> {
+public class PropertiesSource extends Source<Properties> {
 
   /**
    * Utilize Properties as the source.
    */
-  public PropertiesValueProvider(final Properties source) {
+  public PropertiesSource(final Properties source) {
     super(source);
   }
 

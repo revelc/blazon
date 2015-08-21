@@ -12,24 +12,29 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed.breeds;
+package net.revelc.code.blazon.sources;
 
-import net.revelc.code.breed.Breed;
+import net.revelc.code.blazon.Source;
+
+import java.util.Map;
 
 /**
- * A {@link Breed} which represents one of a fixed selection of enum options.
+ * A {@link Source} which wraps a {@link Map}. If values contained in the map are not of type
+ * {@link String}, their {@link #toString()} method will be called to convert them.
  */
-public class OneOf<T extends Enum<T>> extends Breed<T> {
+public class MapSource extends Source<Map<?,?>> {
 
-  private Class<T> enumType;
-
-  public OneOf(Class<T> enumType) {
-    this.enumType = enumType;
+  /**
+   * Utilize a Map as the source.
+   */
+  public MapSource(final Map<?,?> source) {
+    super(source);
   }
 
   @Override
-  protected T convert(final String raw) throws RuntimeException {
-    return Enum.valueOf(enumType, raw);
+  public String getValue(final String key) {
+    Object value = getSource().get(key);
+    return value == null ? null : value.toString();
   }
 
 }

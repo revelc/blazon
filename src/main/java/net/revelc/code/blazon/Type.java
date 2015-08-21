@@ -12,21 +12,20 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed;
+package net.revelc.code.blazon;
 
 /**
- * A Breed(noun) is a type. It provides a mechanism to validate a configuration property, either
- * before or after conversion (or both). A successful conversion will go through
- * {@link #checkPreconditions(String)}, then {@link #convert(String)}, then
- * {@link #checkPostconditions(Object)}. See {@link #process(String)}. Subclasses may choose to
- * throw a specific {@link RuntimeException} like {@link IllegalArgumentException} or
- * {@link NumberFormatException}, in case of error, or they may wish to log the error and continue
- * processing some default behavior (like returning a null).
+ * It provides a mechanism to validate a configuration property, either before or after conversion
+ * (or both). A successful conversion will go through {@link #checkPreconditions(String)}, then
+ * {@link #convert(String)}, then {@link #checkPostconditions(Object)}. See {@link #process(String)}
+ * . Subclasses may choose to throw a specific {@link RuntimeException} like
+ * {@link IllegalArgumentException} or {@link NumberFormatException}, in case of error, or they may
+ * wish to log the error and continue processing some default behavior (like returning a null).
  *
  * @param <T>
- *          The target Java type this Breed represents.
+ *          the target Java type which this class represents
  */
-public abstract class Breed<T> {
+public abstract class Type<T> {
 
   /**
    * Optional. Validate the given element prior to conversion. Override this method to enforce any

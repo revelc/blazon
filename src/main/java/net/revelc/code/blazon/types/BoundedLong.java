@@ -12,16 +12,16 @@
  * limitations under the License.
  */
 
-package net.revelc.code.breed.breeds;
+package net.revelc.code.blazon.types;
 
 import com.google.common.base.Preconditions;
 
-import net.revelc.code.breed.Breed;
+import net.revelc.code.blazon.Type;
 
 /**
  * A {@link Long} which is bounded with a minimum and maximum.
  */
-public class BoundedLong extends Breed<Long> {
+public class BoundedLong extends Type<Long> {
 
   private final long lowerBound;
   private final long upperBound;

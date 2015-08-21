@@ -15,26 +15,26 @@
 [![Build Status][ti]][tl] [![Maven Central][mi]][ml] [![Issues][ii]][il]
 [![Forks][fi]][fl] [![Stars][si]][sl] [![Apache License][li]][ll]
 
-breed
-=====
+blazon
+======
 
 View documentation at:
-http://code.revelc.net/breed
+http://code.revelc.net/blazon
 
 A typed-configuration library, based on Apache Commons Configuration
 
 This project uses [Semantic Versioning 2.0.0][semver].
 
 [semver]: http://semver.org/spec/v2.0.0.html
-[ti]: https://travis-ci.org/revelc/breed.svg?branch=master
-[tl]: https://travis-ci.org/revelc/breed
-[mi]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/breed/badge.svg
-[ml]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/breed
-[ii]: https://img.shields.io/github/issues/revelc/breed.svg
-[il]: https://github.com/revelc/breed/issues
-[fi]: https://img.shields.io/github/forks/revelc/breed.svg
-[fl]: https://github.com/revelc/breed/network
-[si]: https://img.shields.io/github/stars/revelc/breed.svg
-[sl]: https://github.com/revelc/breed/stargazers
+[ti]: https://travis-ci.org/revelc/blazon.svg?branch=master
+[tl]: https://travis-ci.org/revelc/blazon
+[mi]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon/badge.svg
+[ml]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon
+[ii]: https://img.shields.io/github/issues/revelc/blazon.svg
+[il]: https://github.com/revelc/blazon/issues
+[fi]: https://img.shields.io/github/forks/revelc/blazon.svg
+[fl]: https://github.com/revelc/blazon/network
+[si]: https://img.shields.io/github/stars/revelc/blazon.svg
+[sl]: https://github.com/revelc/blazon/stargazers
 [li]: http://img.shields.io/badge/license-ASL-blue.svg
-[ll]: https://github.com/revelc/breed/blob/master/LICENSE
+[ll]: https://github.com/revelc/blazon/blob/master/LICENSE

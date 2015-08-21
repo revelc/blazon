@@ -20,8 +20,8 @@ import com.google.common.base.Preconditions;
 /**
  * A representation of a configuration property or key, which corresponds to a distinct type (or
  * {@link Type}). A key optionally has a default value and can be retrieved from a configuration
- * source using a {@link Source}. When it is retrieved, it will be validated and converted to
- * its expected type according to its {@link Type}.
+ * source using a {@link Source}. When it is retrieved, it will be validated and converted to its
+ * expected type according to its {@link Type}.
  *
  * @param <T>
  *          the type which the value will be represented as when it is retrieved from the

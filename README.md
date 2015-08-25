@@ -21,7 +21,7 @@ blazon
 View documentation at:
 http://code.revelc.net/blazon
 
-A typed-configuration library, based on Apache Commons Configuration
+A validating typed-configuration library for use with various configuration sources.
 
 This project uses [Semantic Versioning 2.0.0][semver].
 

@@ -44,7 +44,7 @@ public class UsageTest {
    */
   @Before
   public void setup() {
-    Properties props = new Properties();
+    final Properties props = new Properties();
     props.setProperty("server1.port", "23");
     props.setProperty("server2.port", "42");
     props.setProperty("choice", "TWO");

@@ -51,18 +51,18 @@ public class KeyTest {
 
   @Test
   public void testPropertiesSource() {
-    Properties props = new Properties();
+    final Properties props = new Properties();
     props.setProperty("my.test.key", "23");
-    PropertiesSource source = new PropertiesSource(props);
+    final PropertiesSource source = new PropertiesSource(props);
     assertEquals((Integer) 23, testKey.getValue(source));
     assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
   }
 
   @Test
   public void testMapSource() {
-    Map<String, String> map = new HashMap<>();
+    final Map<String, String> map = new HashMap<>();
     map.put("my.test.key", "23");
-    MapSource source = new MapSource(map);
+    final MapSource source = new MapSource(map);
     assertEquals((Integer) 23, testKey.getValue(source));
     assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
   }

@@ -21,9 +21,9 @@ import net.revelc.code.blazon.Type;
  */
 public class OneOf<T extends Enum<T>> extends Type<T> {
 
-  private Class<T> enumType;
+  private final Class<T> enumType;
 
-  public OneOf(Class<T> enumType) {
+  public OneOf(final Class<T> enumType) {
     this.enumType = enumType;
   }
 

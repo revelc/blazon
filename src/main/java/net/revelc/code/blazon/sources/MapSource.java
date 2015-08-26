@@ -33,7 +33,7 @@ public class MapSource extends Source<Map<?, ?>> {
 
   @Override
   public String getValue(final String key) {
-    Object value = getSource().get(key);
+    final Object value = getSource().get(key);
     return value == null ? null : value.toString();
   }
 

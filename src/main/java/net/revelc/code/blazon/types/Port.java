@@ -27,7 +27,7 @@ public class Port extends Type<Integer> {
   }
 
   @Override
-  protected Integer checkPostconditions(Integer value) {
+  protected Integer checkPostconditions(final Integer value) {
     if (value < 0 || value > 65535) {
       throw new IllegalArgumentException("Port is not in the range of 0-65535");
     }

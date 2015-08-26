@@ -33,8 +33,8 @@ public class UsageTest {
   private static class ExampleKeys {
     public static final Key<Integer> SERVER1_PORT = new Key<>("server1.port", new Port());
     public static final Key<Integer> SERVER2_PORT = new Key<>("server2.port", new Port());
-    public static final Key<Choices> CHOICE = new Key<>("choice",
-        new OneOf<Choices>(Choices.class));
+    public static final Key<Choices> CHOICE =
+        new Key<>("choice", new OneOf<Choices>(Choices.class));
   }
 
   private PropertiesSource source;

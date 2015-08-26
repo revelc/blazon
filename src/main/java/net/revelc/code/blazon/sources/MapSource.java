@@ -22,12 +22,12 @@ import java.util.Map;
  * A {@link Source} which wraps a {@link Map}. If values contained in the map are not of type
  * {@link String}, their {@link #toString()} method will be called to convert them.
  */
-public class MapSource extends Source<Map<?,?>> {
+public class MapSource extends Source<Map<?, ?>> {
 
   /**
    * Utilize a Map as the source.
    */
-  public MapSource(final Map<?,?> source) {
+  public MapSource(final Map<?, ?> source) {
     super(source);
   }
 

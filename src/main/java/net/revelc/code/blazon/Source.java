@@ -39,8 +39,7 @@ public abstract class Source<T> {
   /**
    * Retrieve a value from a key.
    *
-   * @param key
-   *          the key by which the value can be found, if it exists
+   * @param key the key by which the value can be found, if it exists
    * @return the String value if it exists, or null if it does not exist
    */
   public abstract String getValue(final String key);

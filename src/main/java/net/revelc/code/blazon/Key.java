@@ -23,9 +23,8 @@ import com.google.common.base.Preconditions;
  * source using a {@link Source}. When it is retrieved, it will be validated and converted to its
  * expected type according to its {@link Type}.
  *
- * @param <T>
- *          the type which the value will be represented as when it is retrieved from the
- *          configuration source
+ * @param <T> the type which the value will be represented as when it is retrieved from the
+ *        configuration source
  */
 public class Key<T> {
 
@@ -37,11 +36,9 @@ public class Key<T> {
    * Create a new Key with the given identifier and type, so that its value can be retrieved and
    * from a {@link Source} and processed by the {@link Type} which defines its type.
    *
-   * @param key
-   *          the unique identifier for this particular configuration property
-   * @param type
-   *          the type of property this key represents, which determines how the property's value is
-   *          parsed and validated
+   * @param key the unique identifier for this particular configuration property
+   * @param type the type of property this key represents, which determines how the property's value
+   *        is parsed and validated
    */
   public Key(final String key, final Type<T> type) {
     this(key, type, Optional.<T>absent());
@@ -51,14 +48,11 @@ public class Key<T> {
    * Create a new Key with the given identifier and type, so that its value can be retrieved and
    * from a {@link Source} and processed by the {@link Type} which defines its type.
    *
-   * @param key
-   *          the unique identifier for this particular configuration property
-   * @param type
-   *          the type of property this key represents, which determines how the property's value is
-   *          parsed and validated
-   * @param defaultValue
-   *          the default value to return if the value passed to it was null, or if the {@link Type}
-   *          interprets the a value as equivalent to null
+   * @param key the unique identifier for this particular configuration property
+   * @param type the type of property this key represents, which determines how the property's value
+   *        is parsed and validated
+   * @param defaultValue the default value to return if the value passed to it was null, or if the
+   *        {@link Type} interprets the a value as equivalent to null
    */
   public Key(final String key, final Type<T> type, final T defaultValue) {
     this(key, type, Optional.of(defaultValue));
@@ -117,8 +111,7 @@ public class Key<T> {
    * provide one which is appropriate for that type. For example, if the {@link Type} represents a
    * number, it might return 0 when the value is unset and the user didn't provide a default value.
    *
-   * @param value
-   *          the raw value retrieved from the configuration source, or null if it wasn't found
+   * @param value the raw value retrieved from the configuration source, or null if it wasn't found
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
   protected T parseRawValue(final String value) {
@@ -136,8 +129,7 @@ public class Key<T> {
   /**
    * Retrieve a value from the given {@link Source}, using this {@link #getKey()}.
    *
-   * @param source
-   *          a source of {@link String} values arranged by {@link String} keys
+   * @param source a source of {@link String} values arranged by {@link String} keys
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
   public T getValue(final Source<?> source) {

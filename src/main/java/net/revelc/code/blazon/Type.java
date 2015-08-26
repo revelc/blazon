@@ -22,8 +22,7 @@ package net.revelc.code.blazon;
  * {@link IllegalArgumentException} or {@link NumberFormatException}, in case of error, or they may
  * wish to log the error and continue processing some default behavior (like returning a null).
  *
- * @param <T>
- *          the target Java type which this class represents
+ * @param <T> the target Java type which this class represents
  */
 public abstract class Type<T> {
 
@@ -32,11 +31,10 @@ public abstract class Type<T> {
    * preconditions for conversion. One could also apply any locale-based, or case-conversion, or
    * other normalization here.
    *
-   * @param raw
-   *          the raw value to be validated
+   * @param raw the raw value to be validated
    * @return the valid string
-   * @throws RuntimeException
-   *           an exception appropriate to the failure, if the element fails to validate
+   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
+   *         validate
    */
   protected String checkPreconditions(final String raw) throws RuntimeException {
     return raw;
@@ -45,21 +43,19 @@ public abstract class Type<T> {
   /**
    * Convert the value to the appropriate type.
    *
-   * @param raw
-   *          the raw value to be converted
+   * @param raw the raw value to be converted
    * @return the value, after conversion
-   * @throws RuntimeException
-   *           an exception appropriate to the failure, if the element fails to convert
+   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
+   *         convert
    */
   protected abstract T convert(final String raw) throws RuntimeException;
 
   /**
    * Optional. Override to apply any constraints on the converted value.
    *
-   * @param value
-   *          the raw value to be validated
-   * @throws RuntimeException
-   *           an exception appropriate to the failure, if the element fails to validate
+   * @param value the raw value to be validated
+   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
+   *         validate
    */
   protected T checkPostconditions(final T value) throws RuntimeException {
     return value;
@@ -69,12 +65,10 @@ public abstract class Type<T> {
    * Processes the raw value by first applying {@link #checkPreconditions(String)}, then
    * {@link #convert(String)}, then {@link #checkPostconditions(Object)}.
    *
-   * @param raw
-   *          the raw value to be converted
+   * @param raw the raw value to be converted
    * @return the value, after validation, conversion, and applying any post-conversion constraints
-   * @throws RuntimeException
-   *           an exception appropriate to the failure, if the element fails at any point in the
-   *           conversion
+   * @throws RuntimeException an exception appropriate to the failure, if the element fails at any
+   *         point in the conversion
    */
   public final T process(final String raw) throws RuntimeException {
     return checkPostconditions(convert(checkPreconditions(raw)));

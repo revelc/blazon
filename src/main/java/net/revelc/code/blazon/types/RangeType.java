@@ -27,10 +27,8 @@ public class RangeType extends LongType {
   /**
    * Represents a bounded range.
    *
-   * @param lowerBound
-   *          the lower bound, inclusive
-   * @param upperBound
-   *          the upper bound, inclusive
+   * @param lowerBound the lower bound, inclusive
+   * @param upperBound the upper bound, inclusive
    */
   public RangeType(final long lowerBound, final long upperBound) {
     Preconditions.checkArgument(lowerBound <= upperBound,

@@ -60,7 +60,7 @@ public class KeyTest {
 
   @Test
   public void testMapSource() {
-    Map<String,String> map = new HashMap<>();
+    Map<String, String> map = new HashMap<>();
     map.put("my.test.key", "23");
     MapSource source = new MapSource(map);
     assertEquals((Integer) 23, testKey.getValue(source));

@@ -14,64 +14,86 @@
 
 package net.revelc.code.blazon;
 
+import com.google.common.base.Optional;
+
 /**
  * It provides a mechanism to validate a configuration property, either before or after conversion
- * (or both). A successful conversion will go through {@link #checkPreconditions(String)}, then
- * {@link #convert(String)}, then {@link #checkPostconditions(Object)}. See {@link #process(String)}
- * . Subclasses may choose to throw a specific {@link RuntimeException} like
+ * (or both). A successful conversion will go through {@link #checkPreconditions(Optional)}, then
+ * {@link #convert(String)}, then {@link #checkPostconditions(Object)}. See {@link #parse(String)}.
+ * Subclasses may choose to throw a specific {@link RuntimeException} like
  * {@link IllegalArgumentException} or {@link NumberFormatException}, in case of error, or they may
- * wish to log the error and continue processing some default behavior (like returning a null).
+ * wish to log the error and return {@link Optional#absent()} in any of the methods to signal that a
+ * default should be used.
  *
  * @param <T> the target Java type which this class represents
  */
 public abstract class Type<T> {
 
   /**
-   * Optional. Validate the given element prior to conversion. Override this method to enforce any
-   * preconditions for conversion. One could also apply any locale-based, or case-conversion, or
-   * other normalization here.
+   * Optional. Validate and normalize the raw string input. Override this method to enforce any
+   * preconditions for conversion, such as to require that it be present. One could also apply any
+   * locale-based, or case-conversion, or other normalization here. When the preconditions are not
+   * satisfied, this method may throw an appropriate {@link RuntimeException} or return
+   * {@link Optional#absent()} to signal that a default value should be used.
    *
-   * @param raw the raw value to be validated
-   * @return the valid string
-   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
-   *         validate
+   * @param raw an {@link Optional} which is either absent or contains the raw string to be checked
+   * @return a non-null instance of {@link Optional}, either containing a normalized form of the raw
+   *         input after validation, or absent, to signal that a default should be used in its place
    */
-  protected String checkPreconditions(final String raw) throws RuntimeException {
+  protected Optional<String> checkPreconditions(final Optional<String> raw) {
     return raw;
   }
 
   /**
-   * Convert the value to the appropriate type.
+   * Convert the value to the appropriate type. If the raw string cannot be converted to the
+   * expected type, this method may throw an appropriate {@link RuntimeException} or return
+   * {@link Optional#absent()} to signal that a default value should be used.
    *
-   * @param raw the raw value to be converted
-   * @return the value, after conversion
-   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
-   *         convert
+   * @param normalized the non-null normalized value to be converted
+   * @return a non-null instance of {@link Optional}, either containing the converted value, or
+   *         absent, to signal that a default should be used in its place
    */
-  protected abstract T convert(final String raw) throws RuntimeException;
+  protected abstract Optional<T> convert(final String normalized);
 
   /**
-   * Optional. Override to apply any constraints on the converted value.
+   * Optional. Apply any constraints on the converted value. If the postconditions are not
+   * satisfied, this method may throw an appropriate {@link RuntimeException} or return
+   * {@link Optional#absent()} to signal that a default value should be used.
    *
-   * @param value the raw value to be validated
-   * @throws RuntimeException an exception appropriate to the failure, if the element fails to
-   *         validate
+   * @param converted the non-null converted value to be checked
+   * @return a non-null instance of {@link Optional}, either containing the converted value which
+   *         was passed in, or absent, to signal that a default should be used in its place
    */
-  protected T checkPostconditions(final T value) throws RuntimeException {
-    return value;
+  protected Optional<T> checkPostconditions(final T converted) {
+    return Optional.of(converted);
   }
 
   /**
-   * Processes the raw value by first applying {@link #checkPreconditions(String)}, then
+   * Parses the raw value by first applying {@link #checkPreconditions(Optional)}, then
    * {@link #convert(String)}, then {@link #checkPostconditions(Object)}.
    *
    * @param raw the raw value to be converted
    * @return the value, after validation, conversion, and applying any post-conversion constraints
-   * @throws RuntimeException an exception appropriate to the failure, if the element fails at any
-   *         point in the conversion
    */
-  public final T process(final String raw) throws RuntimeException {
-    return checkPostconditions(convert(checkPreconditions(raw)));
+  public final T parse(final String raw) {
+    final Optional<String> normalized = checkPreconditions(Optional.fromNullable(raw));
+    if (!normalized.isPresent()) {
+      return null;
+    }
+    final Optional<T> converted = convert(normalized.get());
+    if (!converted.isPresent()) {
+      return null;
+    }
+    final Optional<T> verified = checkPostconditions(converted.get());
+    return verified.orNull();
   }
+
+  /**
+   * Provides a description of this type, which can be useful for documentation or generated error
+   * messages.
+   *
+   * @return a description of this instance
+   */
+  public abstract String description();
 
 }

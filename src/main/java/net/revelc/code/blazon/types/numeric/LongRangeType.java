@@ -12,17 +12,27 @@
  * limitations under the License.
  */
 
-package net.revelc.code.blazon.types;
+package net.revelc.code.blazon.types.numeric;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Optional;
+import com.google.common.collect.Range;
 
 /**
  * A {@link LongType} which is bounded with a minimum and maximum value (both inclusive).
  */
-public class RangeType extends LongType {
+public class LongRangeType extends LongType {
 
-  private final long lowerBound;
-  private final long upperBound;
+  private final Range<Long> range;
+
+  @Override
+  public Long getLowerBound() {
+    return range.lowerEndpoint();
+  }
+
+  @Override
+  public Long getUpperBound() {
+    return range.upperEndpoint();
+  }
 
   /**
    * Represents a bounded range.
@@ -30,23 +40,16 @@ public class RangeType extends LongType {
    * @param lowerBound the lower bound, inclusive
    * @param upperBound the upper bound, inclusive
    */
-  public RangeType(final long lowerBound, final long upperBound) {
-    Preconditions.checkArgument(lowerBound <= upperBound,
-        "Lower bound should be less than or equal to the upper bound");
-    this.lowerBound = lowerBound;
-    this.upperBound = upperBound;
+  public LongRangeType(final long lowerBound, final long upperBound) {
+    range = Range.<Long>closed(lowerBound, upperBound);
   }
 
   @Override
-  protected Long checkPostconditions(final Long value) {
-    if (value == null) {
-      return null;
+  protected Optional<Long> checkPostconditions(final Long value) {
+    if (!range.contains(value)) {
+      throw new IllegalArgumentException(value + " is not in the range " + range.toString());
     }
-    if (value < lowerBound || value > upperBound) {
-      throw new IllegalArgumentException(
-          value + " is not in the range [" + lowerBound + "," + upperBound + "]");
-    }
-    return value;
+    return Optional.of(value);
   }
 
 }

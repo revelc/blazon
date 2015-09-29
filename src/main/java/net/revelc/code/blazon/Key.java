@@ -114,12 +114,12 @@ public class Key<T> {
    * @param value the raw value retrieved from the configuration source, or null if it wasn't found
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
-  protected T parseRawValue(final String value) {
-    final T defaultV = getDefaultValue();
+  protected T parseRawValue(final String value, final T defaultValue) {
+    final T defaultV = defaultValue;
     if (value == null && defaultV != null) {
       return defaultV;
     }
-    final T parsed = getType().process(value);
+    final T parsed = getType().parse(value);
     if (parsed == null) {
       return defaultV;
     }
@@ -127,13 +127,14 @@ public class Key<T> {
   }
 
   /**
-   * Retrieve a value from the given {@link Source}, using this {@link #getKey()}.
+   * Retrieve a value from the given {@link Source}, using this {@link #getKey()}. While this method
+   * can be overridden, it's preferred to override {@link #parseRawValue(String, Object)} instead.
    *
    * @param source a source of {@link String} values arranged by {@link String} keys
    * @return an instance of the type this Key represents, after it has been parsed and validated
    */
   public T getValue(final Source<?> source) {
-    return parseRawValue(Preconditions.checkNotNull(source).getValue(getKey()));
+    return parseRawValue(Preconditions.checkNotNull(source).getValue(getKey()), getDefaultValue());
   }
 
 }

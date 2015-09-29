@@ -15,56 +15,38 @@
 package net.revelc.code.blazon;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
-import net.revelc.code.blazon.sources.MapSource;
-import net.revelc.code.blazon.sources.PropertiesSource;
-import org.junit.Before;
+import net.revelc.code.blazon.types.numeric.IntegerType;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 public class KeyTest {
 
-  private Key<Integer> testKey;
-  private Key<Integer> testKeyWithDefault;
+  @Test
+  public void testKey() {
+    final Key<Integer> k = new Key<>("my.key.first", IntegerType.HEX);
+    assertEquals("my.key.first", k.getKey());
 
-  /**
-   * Create a test key for use in tests.
-   */
-  @Before
-  public void setup() {
-    testKey = new Key<>("my.test.key", new Type<Integer>() {
-      @Override
-      protected Integer convert(final String raw) throws RuntimeException {
-        return Integer.parseInt(raw);
-      }
-    });
-    testKeyWithDefault = new Key<>("my.test.key.with.default", new Type<Integer>() {
-      @Override
-      protected Integer convert(final String raw) throws RuntimeException {
-        return Integer.parseInt(raw);
-      }
-    }, 42);
+    final Key<Integer> k2 = new Key<>("my.key.second", IntegerType.HEX, 42);
+    assertEquals("my.key.second", k2.getKey());
   }
 
   @Test
-  public void testPropertiesSource() {
-    final Properties props = new Properties();
-    props.setProperty("my.test.key", "23");
-    final PropertiesSource source = new PropertiesSource(props);
-    assertEquals((Integer) 23, testKey.getValue(source));
-    assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
+  public void testType() {
+    final Key<Integer> k = new Key<>("my.key", IntegerType.OCT);
+    assertEquals(IntegerType.OCT, k.getType());
+
+    final Key<Integer> k2 = new Key<>("my.key", IntegerType.HEX, 42);
+    assertEquals(IntegerType.HEX, k2.getType());
   }
 
   @Test
-  public void testMapSource() {
-    final Map<String, String> map = new HashMap<>();
-    map.put("my.test.key", "23");
-    final MapSource source = new MapSource(map);
-    assertEquals((Integer) 23, testKey.getValue(source));
-    assertEquals((Integer) 42, testKeyWithDefault.getValue(source));
+  public void testDefaultValue() {
+    final Key<Integer> k = new Key<>("my.key", IntegerType.HEX);
+    assertNull(k.getDefaultValue());
+
+    final Key<Integer> k2 = new Key<>("my.key", IntegerType.HEX, 42);
+    assertEquals((Integer) 42, k2.getDefaultValue());
   }
 
 }

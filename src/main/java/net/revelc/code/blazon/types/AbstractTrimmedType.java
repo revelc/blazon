@@ -14,20 +14,27 @@
 
 package net.revelc.code.blazon.types;
 
+import com.google.common.base.Optional;
+
 import net.revelc.code.blazon.Type;
 
 /**
  * A {@link Type} which normalizes the raw input {@link String} by trimming leading and trailing
- * whitespace. Subclasses which override {@link #checkPreconditions(String)} should remember to act
- * upon <code>super.checkPreconditions(raw)</code>.
+ * whitespace. Empty strings, after trimming, are normalized to being absent. Subclasses which
+ * override {@link #checkPreconditions(Optional)} should remember to act upon
+ * <code>super.checkPreconditions(raw)</code>, which could be absent.
  *
  * @see String#trim()
  */
 public abstract class AbstractTrimmedType<T> extends Type<T> {
 
   @Override
-  protected String checkPreconditions(final String raw) {
-    return raw == null ? raw : raw.trim();
+  protected Optional<String> checkPreconditions(final Optional<String> raw) {
+    String result = null;
+    if (raw.isPresent()) {
+      result = raw.get().trim();
+    }
+    return Optional.fromNullable((result == null || result.isEmpty()) ? null : result);
   }
 
 }

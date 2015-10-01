@@ -45,16 +45,17 @@ public class OneOf<T extends Enum<T>> extends AbstractTrimmedType<T> {
 
   @Override
   protected Optional<T> convert(final String raw) {
-    return Optional.<T>of(findEnum(raw));
+    return Optional.<T>of(findEnum(enumType, caseSensitive, raw));
   }
 
-  private T findEnum(final String raw) {
+  protected static <E extends Enum<E>> E findEnum(final Class<E> enumType,
+      final boolean caseSensitive, final String raw) {
     try {
       return Enum.valueOf(enumType, raw);
     } catch (final IllegalArgumentException e) {
       if (!caseSensitive) {
         // case-insensitive search if we can't find it
-        for (final T t : enumType.getEnumConstants()) {
+        for (final E t : enumType.getEnumConstants()) {
           if (t.name().equalsIgnoreCase(raw)) {
             return t;
           }

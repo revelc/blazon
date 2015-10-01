@@ -14,11 +14,15 @@
 
 package net.revelc.code.blazon.types.units;
 
-import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
 import net.revelc.code.blazon.types.AbstractTrimmedType;
+import net.revelc.code.blazon.types.strings.OneOf;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An {@link AbstractTrimmedType} which converts the {@link String} to a {@link Long}. If the input
@@ -28,22 +32,48 @@ import net.revelc.code.blazon.types.AbstractTrimmedType;
 public abstract class BasicUnits<M extends Number, U extends Enum<U>>
     extends AbstractTrimmedType<Quantity<M, U>> {
 
-  private final Function<String, M> numberParser;
   private final U defaultUnit;
+  private final boolean caseSensitive;
 
-  protected BasicUnits(final Function<String, M> numberParser, final U defaultUnit) {
-    this.numberParser = Preconditions.checkNotNull(numberParser);
-    this.defaultUnit = Preconditions.checkNotNull(defaultUnit);
+  private static final class OneOfFriend extends OneOf<java.lang.annotation.ElementType> {
+    private OneOfFriend() {
+      super(java.lang.annotation.ElementType.class);
+    }
+
+    protected static <E extends Enum<E>> E findEnum(final Class<E> enumType,
+        final boolean caseSensitive, final String raw) {
+      return OneOf.findEnum(enumType, caseSensitive, raw);
+    }
   }
+
+  protected BasicUnits(final U defaultUnit, final boolean caseSensitive) {
+    this.defaultUnit = Preconditions.checkNotNull(defaultUnit);
+    this.caseSensitive = caseSensitive;
+  }
+
+  public abstract M convertNumber(final String number);
 
   @Override
   protected Optional<Quantity<M, U>> convert(final String normalized) {
-    // TODO
-    final String numberPart = "TODO";
-    final U unitPart = null; // TODO
-    final Quantity<M, U> quantity =
-        new Quantity<>(numberParser.apply(numberPart), unitPart == null ? defaultUnit : unitPart);
-    return Optional.<Quantity<M, U>>of(quantity);
+    @SuppressWarnings("unchecked")
+    final Class<U> unitClass = (Class<U>) defaultUnit.getClass();
+
+    final Matcher matcher =
+        Pattern.compile("^(.*?)(" + Joiner.on('|').join(unitClass.getEnumConstants()) + ")?$",
+            Pattern.DOTALL | Pattern.CASE_INSENSITIVE).matcher(normalized);
+
+    if (!matcher.find()) {
+      throw new AssertionError(
+          "String does not match pattern '" + matcher.pattern().pattern() + "':\n" + normalized);
+    }
+    final String numberPart = matcher.group(1).trim();
+    final String unitPart = matcher.group(2);
+
+    final U unit =
+        unitPart == null ? defaultUnit : OneOfFriend.findEnum(unitClass, caseSensitive, unitPart);
+    final Quantity<M, U> quantity = new Quantity<>(convertNumber(numberPart), unit);
+
+    return Optional.of(quantity);
   }
 
 }

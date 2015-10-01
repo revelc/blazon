@@ -16,21 +16,27 @@ package net.revelc.code.blazon.types.units;
 
 import com.google.common.base.Preconditions;
 
-public class Quantity<MAGNITUDE extends Number, UNIT extends Enum<UNIT>> {
+/**
+ * A value class representing a magnitude and unit.
+ *
+ * @param <M> A subclass of {@link Number}, which represents the magnitude of the quantity.
+ * @param <U> An {@link Enum} representing the distinct available unit types.
+ */
+public class Quantity<M extends Number, U extends Enum<U>> {
 
-  private final MAGNITUDE magnitude;
-  private final UNIT unit;
+  private final M magnitude;
+  private final U unit;
 
-  public Quantity(final MAGNITUDE magnitude, final UNIT unit) {
+  public Quantity(final M magnitude, final U unit) {
     this.magnitude = Preconditions.checkNotNull(magnitude);
     this.unit = Preconditions.checkNotNull(unit);
   }
 
-  public MAGNITUDE getMagnitude() {
+  public M getMagnitude() {
     return magnitude;
   }
 
-  public UNIT getUnit() {
+  public U getUnit() {
     return unit;
   }
 

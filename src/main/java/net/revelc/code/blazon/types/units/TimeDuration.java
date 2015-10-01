@@ -14,9 +14,11 @@
 
 package net.revelc.code.blazon.types.units;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Range;
+
+import net.revelc.code.blazon.types.units.TimeDuration.TimeDurationUnit;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,36 +28,75 @@ import java.util.concurrent.TimeUnit;
  * <ul>
  * <li>'ns' for nanoseconds</li>
  * <li>'ms' for milliseconds</li>
- * <li>'s' for seconds (default)</li>
+ * <li>'s' for seconds (default when none specified)</li>
  * <li>'m' for minutes</li>
  * <li>'h' for hours</li>
  * <li>'d' for days</li>
  * </ul>
- * Example: 100ms, 3d, 4h, 1000ns, 5
+ * Example: 100ms, 3d, 4h, 1000ns, 42
  */
-public class TimeDuration extends BasicUnits<Long, TimeUnit> {
+public class TimeDuration extends BasicUnits<Long, TimeDurationUnit> {
 
-  public static final TimeDuration NON_NEGATIVE = new TimeDuration(0L, Long.MAX_VALUE);
+  public static enum TimeDurationUnit {
+    ns(TimeUnit.NANOSECONDS), ms(TimeUnit.MILLISECONDS), s(TimeUnit.SECONDS), m(
+        TimeUnit.MINUTES), h(TimeUnit.HOURS), d(TimeUnit.DAYS);
 
-  public TimeDuration(final long lowerBound, final long upperBound) {
-    super(new Function<String, Long>() {
-      @Override
-      public Long apply(final String input) {
-        return Long.parseLong(input);
-      }
-    }, TimeUnit.SECONDS);
-    Preconditions.checkArgument(lowerBound <= upperBound);
+    private final TimeUnit timeUnit;
+
+    private TimeDurationUnit(final TimeUnit timeUnit) {
+      this.timeUnit = Preconditions.checkNotNull(timeUnit);
+    }
+
+    public long convertTo(final TimeDurationUnit destinationUnit, final long value) {
+      return convertTo(Preconditions.checkNotNull(destinationUnit).timeUnit, value);
+    }
+
+    public long convertTo(final TimeUnit destinationUnit, final long value) {
+      return Preconditions.checkNotNull(destinationUnit).convert(value, timeUnit);
+    }
+  }
+
+  public static final TimeDuration POSITIVE_SECONDS =
+      new TimeDuration(1L, Long.MAX_VALUE, TimeDurationUnit.s);
+  public static final TimeDuration NON_NEGATIVE_SECONDS =
+      new TimeDuration(0L, Long.MAX_VALUE, TimeDurationUnit.s);
+
+  private final Range<Long> range;
+  private final TimeDurationUnit rangeUnits;
+
+  /**
+   * Constructs a duration of time, bounded with a minimum and maximum value.
+   *
+   * @param lowerBound The minimum value permitted.
+   * @param upperBound The maximum value permitted.
+   */
+  public TimeDuration(final long lowerBound, final long upperBound,
+      final TimeDurationUnit boundUnits) {
+    super(TimeDurationUnit.s, false);
+    this.range = Range.closed(lowerBound, upperBound);
+    this.rangeUnits = Preconditions.checkNotNull(boundUnits);
   }
 
   @Override
-  protected Optional<Quantity<Long, TimeUnit>> convert(final String raw) {
-    return Optional.absent();
+  protected Optional<Quantity<Long, TimeDurationUnit>> checkPostconditions(
+      final Quantity<Long, TimeDurationUnit> converted) {
+    final Long value = converted.getUnit().convertTo(rangeUnits, converted.getMagnitude());
+    if (!range.contains(value)) {
+      throw new IllegalArgumentException(
+          value + rangeUnits.name() + " is not in the range " + range.toString());
+    }
+    return Optional.of(converted);
   }
 
   @Override
   public String description() {
     // TODO
     return "TODO";
+  }
+
+  @Override
+  public Long convertNumber(final String number) {
+    return Long.parseLong(number);
   }
 
 }

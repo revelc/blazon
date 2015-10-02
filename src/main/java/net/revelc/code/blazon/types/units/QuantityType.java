@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 
 import net.revelc.code.blazon.types.AbstractTrimmedType;
 import net.revelc.code.blazon.types.strings.OneOf;
+import net.revelc.code.blazon.types.units.Quantity.Converter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,8 +30,11 @@ import java.util.regex.Pattern;
  * is null, or the input contains only whitespace, the result is null. If a
  * {@link NumberFormatException} occurs, it will be thrown.
  */
-public abstract class BasicUnits<M extends Number, U extends Enum<U>>
+/* @formatter:off */
+public abstract class QuantityType<M extends Number & Comparable<M>,
+                                   U extends Enum<U> & Converter<M, U>>
     extends AbstractTrimmedType<Quantity<M, U>> {
+/* @formatter:on */
 
   private final U defaultUnit;
   private final boolean caseSensitive;
@@ -46,17 +50,25 @@ public abstract class BasicUnits<M extends Number, U extends Enum<U>>
     }
   }
 
-  protected BasicUnits(final U defaultUnit, final boolean caseSensitive) {
+  protected QuantityType(final U defaultUnit, final boolean caseSensitive) {
     this.defaultUnit = Preconditions.checkNotNull(defaultUnit);
     this.caseSensitive = caseSensitive;
   }
 
-  public abstract M convertNumber(final String number);
+  public U getDefaultUnit() {
+    return defaultUnit;
+  }
+
+  public boolean getCaseSensitive() {
+    return caseSensitive;
+  }
+
+  public abstract M parseNumericalPart(final String number);
 
   @Override
   protected Optional<Quantity<M, U>> convert(final String normalized) {
     @SuppressWarnings("unchecked")
-    final Class<U> unitClass = (Class<U>) defaultUnit.getClass();
+    final Class<U> unitClass = (Class<U>) getDefaultUnit().getClass();
 
     final Matcher matcher =
         Pattern.compile("^(.*?)(" + Joiner.on('|').join(unitClass.getEnumConstants()) + ")?$",
@@ -69,9 +81,9 @@ public abstract class BasicUnits<M extends Number, U extends Enum<U>>
     final String numberPart = matcher.group(1).trim();
     final String unitPart = matcher.group(2);
 
-    final U unit =
-        unitPart == null ? defaultUnit : OneOfFriend.findEnum(unitClass, caseSensitive, unitPart);
-    final Quantity<M, U> quantity = new Quantity<>(convertNumber(numberPart), unit);
+    final U unit = unitPart == null ? getDefaultUnit()
+        : OneOfFriend.findEnum(unitClass, getCaseSensitive(), unitPart);
+    final Quantity<M, U> quantity = new Quantity<M, U>(parseNumericalPart(numberPart), unit);
 
     return Optional.of(quantity);
   }

@@ -17,7 +17,6 @@ package net.revelc.code.blazon.types.strings;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-
 import net.revelc.code.blazon.types.AbstractTrimmedType;
 
 /**

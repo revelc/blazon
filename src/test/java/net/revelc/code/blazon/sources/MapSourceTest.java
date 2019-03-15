@@ -19,13 +19,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Collections;
+import java.util.Map;
 import net.revelc.code.blazon.Key;
 import net.revelc.code.blazon.types.numeric.IntegerType;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.Map;
 
 public class MapSourceTest {
 

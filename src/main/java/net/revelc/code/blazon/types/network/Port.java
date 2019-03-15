@@ -15,7 +15,6 @@
 package net.revelc.code.blazon.types.network;
 
 import com.google.common.collect.Range;
-
 import net.revelc.code.blazon.Type;
 import net.revelc.code.blazon.types.numeric.IntegerRangeType;
 

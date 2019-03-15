@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import com.google.common.base.Optional;
-
 import net.revelc.code.blazon.Type;
 import org.junit.Test;
 

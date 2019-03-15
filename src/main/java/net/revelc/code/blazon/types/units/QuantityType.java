@@ -17,13 +17,11 @@ package net.revelc.code.blazon.types.units;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.revelc.code.blazon.types.AbstractTrimmedType;
 import net.revelc.code.blazon.types.strings.OneOf;
 import net.revelc.code.blazon.types.units.Quantity.Converter;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * An {@link AbstractTrimmedType} which converts the {@link String} to a {@link Long}. If the input
@@ -34,7 +32,7 @@ import java.util.regex.Pattern;
 public abstract class QuantityType<M extends Number & Comparable<M>,
                                    U extends Enum<U> & Converter<M, U>>
     extends AbstractTrimmedType<Quantity<M, U>> {
-/* @formatter:on */
+  /* @formatter:on */
 
   private final U defaultUnit;
   private final boolean caseSensitive;

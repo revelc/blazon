@@ -15,7 +15,6 @@
 package net.revelc.code.blazon.types.units;
 
 import com.google.common.base.Preconditions;
-
 import net.revelc.code.blazon.types.units.Quantity.Converter;
 
 /**

@@ -14,9 +14,8 @@
 
 package net.revelc.code.blazon.sources;
 
-import net.revelc.code.blazon.Source;
-
 import java.util.Map;
+import net.revelc.code.blazon.Source;
 
 /**
  * A {@link Source} which wraps a {@link Map}. If values contained in the map are not of type

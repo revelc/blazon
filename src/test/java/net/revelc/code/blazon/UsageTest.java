@@ -16,13 +16,12 @@ package net.revelc.code.blazon;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Properties;
 import net.revelc.code.blazon.sources.PropertiesSource;
 import net.revelc.code.blazon.types.network.Port;
 import net.revelc.code.blazon.types.strings.OneOf;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Properties;
 
 public class UsageTest {
 

@@ -19,12 +19,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Properties;
 import net.revelc.code.blazon.Key;
 import net.revelc.code.blazon.types.numeric.IntegerType;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Properties;
 
 public class PropertiesSourceTest {
 

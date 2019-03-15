@@ -18,7 +18,6 @@ import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-
 import net.revelc.code.blazon.Type;
 import net.revelc.code.blazon.types.AbstractTrimmedType;
 

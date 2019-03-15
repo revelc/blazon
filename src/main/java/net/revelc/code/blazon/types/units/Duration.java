@@ -16,11 +16,9 @@ package net.revelc.code.blazon.types.units;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
-
+import java.util.concurrent.TimeUnit;
 import net.revelc.code.blazon.types.units.Duration.Unit;
 import net.revelc.code.blazon.types.units.Quantity.Converter;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Specifies a non-negative base-10 integer quantity of time, followed by the units of time which

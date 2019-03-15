@@ -15,7 +15,6 @@
 package net.revelc.code.blazon.types;
 
 import com.google.common.base.Optional;
-
 import net.revelc.code.blazon.Type;
 
 /**

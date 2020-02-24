@@ -17,7 +17,6 @@ package net.revelc.code.blazon.types.strings;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import com.google.common.base.Predicate;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -48,13 +47,7 @@ public class StringTypeTest {
 
   @Test
   public void testWithPredicate() {
-    final StringType pred = new StringType(new Predicate<String>() {
-
-      @Override
-      public boolean apply(final String input) {
-        return input.length() >= 4;
-      }
-    }, "at least length 2");
+    final StringType pred = new StringType(x -> x.length() >= 4, "at least length 2");
 
     assertEquals("blah", pred.parse("   blah    \n"));
     assertEquals("blah2", pred.parse("blah2"));

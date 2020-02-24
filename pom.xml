@@ -51,20 +51,21 @@
     <url>https://github.com/revelc/blazon/issues</url>
   </issueManagement>
   <properties>
-    <!-- findbugs-maven-plugin won't work on jdk8 or later; set to 3.0.0 or newer -->
-    <findbugs.version>3.0.2</findbugs.version>
+    <maven.compiler.release>8</maven.compiler.release>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>14.0.1</version>
+        <version>28.2-jre</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.11</version>
+        <version>4.13</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -83,32 +84,37 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>net.revelc.code</groupId>
-          <artifactId>impsort-maven-plugin</artifactId>
-          <version>1.2.0</version>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.8.1</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${findbugs.version}</version>
+          <groupId>net.revelc.code</groupId>
+          <artifactId>impsort-maven-plugin</artifactId>
+          <version>1.3.2</version>
+        </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>3.1.12.1</version>
           <configuration>
             <xmlOutput>true</xmlOutput>
             <effort>Max</effort>
             <failOnError>true</failOnError>
             <includeTests>true</includeTests>
             <maxRank>16</maxRank>
-            <excludeFilterFile>src/main/findbugs/exclude-filter.xml</excludeFilterFile>
+            <excludeFilterFile>src/main/spotbugs/exclude-filter.xml</excludeFilterFile>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
           <dependencies>
             <dependency>
               <groupId>com.puppycrawl.tools</groupId>
               <artifactId>checkstyle</artifactId>
-              <version>8.18</version>
+              <version>8.29</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -116,11 +122,11 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>run-findbugs</id>
+            <id>run-spotbugs</id>
             <goals>
               <goal>check</goal>
             </goals>

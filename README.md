@@ -12,29 +12,23 @@
   limitations under the License.
 -->
 
-[![Build Status][ti]][tl] [![Maven Central][mi]][ml] [![Issues][ii]][il]
-[![Forks][fi]][fl] [![Stars][si]][sl] [![Apache License][li]][ll]
+[![mvn verify][ci_img]][ci_link]
+[![Maven Central][maven_img]][maven_link]
+[![License][license_img]][license_link]
 
-blazon
-======
+# blazon
 
 View documentation at:
-http://code.revelc.net/blazon
+https://code.revelc.net/blazon
 
 A validating typed-configuration library for use with various configuration sources.
 
 This project uses [Semantic Versioning 2.0.0][semver].
 
-[semver]: http://semver.org/spec/v2.0.0.html
-[ti]: https://travis-ci.org/revelc/blazon.svg?branch=master
-[tl]: https://travis-ci.org/revelc/blazon
-[mi]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon/badge.svg
-[ml]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon
-[ii]: https://img.shields.io/github/issues/revelc/blazon.svg
-[il]: https://github.com/revelc/blazon/issues
-[fi]: https://img.shields.io/github/forks/revelc/blazon.svg
-[fl]: https://github.com/revelc/blazon/network
-[si]: https://img.shields.io/github/stars/revelc/blazon.svg
-[sl]: https://github.com/revelc/blazon/stargazers
-[li]: http://img.shields.io/badge/license-ASL-blue.svg
-[ll]: https://github.com/revelc/blazon/blob/master/LICENSE
+[semver]: https://semver.org/spec/v2.0.0.html
+[ci_img]: https://github.com/revelc/blazon/workflows/mvn%20verify/badge.svg
+[ci_link]: https://github.com/revelc/blazon/actions
+[license_img]: https://img.shields.io/badge/license-Apache%202.0-blue.svg
+[license_link]: https://github.com/revelc/blazon/blob/main/LICENSE
+[maven_img]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon/badge.svg
+[maven_link]: https://maven-badges.herokuapp.com/maven-central/net.revelc.code/blazon
